@@ -62,12 +62,17 @@ class ApplicationController extends Controller
         $inputData = $request->input('data', []);
 
         // Handle File Uploads
-        // We look for files in data.KEY
         $fileKeys = ['passport_file', 'transcript_file', 'english_test_file'];
         foreach ($fileKeys as $key) {
+            $pathKey = $key . '_path';
             if ($request->hasFile("data.{$key}")) {
                 $path = $request->file("data.{$key}")->store("applications/{$application->id}", 'public');
-                $inputData[$key . '_path'] = '/storage/' . $path;
+                $inputData[$pathKey] = '/storage/' . $path;
+            } else {
+                // Safeguard: If no new file uploaded, do not overwrite existing path with empty value from input
+                if (isset($inputData[$pathKey]) && empty($inputData[$pathKey]) && !empty($currentData[$pathKey])) {
+                    unset($inputData[$pathKey]);
+                }
             }
         }
 

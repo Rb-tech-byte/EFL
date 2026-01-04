@@ -16,11 +16,32 @@ export default function Show({ application }: any) {
         put(route('admin.applications.update', application.id));
     };
 
+    const handlePrint = () => {
+        window.print();
+    };
+
     const appData = application.data || {};
 
     return (
-        <AuthenticatedLayout header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Application Details</h2>}>
+        <AuthenticatedLayout header={
+            <div className="flex justify-between items-center">
+                <h2 className="font-semibold text-xl text-gray-800 leading-tight">Application Details</h2>
+                <button onClick={handlePrint} className="no-print bg-gray-800 text-white px-4 py-2 rounded text-sm hover:bg-gray-700">
+                    🖨️ Print Application
+                </button>
+            </div>
+        }>
             <Head title={`Application #${application.id}`} />
+
+            <style>{`
+                @media print {
+                    nav, header, aside, .no-print { display: none !important; }
+                    body { background: white; -webkit-print-color-adjust: exact; }
+                    .max-w-7xl { max-width: none !important; width: 100% !important; padding: 0 !important; }
+                    .bg-white { box-shadow: none !important; border: 1px solid #eee; break-inside: avoid; }
+                    .py-12 { py-0 !important; }
+                }
+            `}</style>
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
@@ -39,7 +60,7 @@ export default function Show({ application }: any) {
                                         id="status"
                                         value={data.status}
                                         onChange={(e) => setData('status', e.target.value)}
-                                        className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                                        className="mt-1 block w-full border-gray-300 focus:border-primary-500 focus:ring-primary-500 rounded-md shadow-sm"
                                     >
                                         <option value="draft">Draft</option>
                                         <option value="submitted">Submitted</option>
@@ -101,7 +122,7 @@ export default function Show({ application }: any) {
                                     {appData.passport_path ? (
                                         <a href={appData.passport_path} target="_blank" className="block p-4 border rounded hover:bg-gray-50 text-center">
                                             <div className="text-2xl mb-2">🛂</div>
-                                            <div className="text-sm font-bold text-blue-600">Passport Check</div>
+                                            <div className="text-sm font-bold text-primary-600">Passport Check</div>
                                             <span className="text-xs text-gray-500">View Document</span>
                                         </a>
                                     ) : <div className="p-4 border border-dashed rounded text-center text-gray-400">No Passport</div>}
@@ -109,7 +130,7 @@ export default function Show({ application }: any) {
                                     {appData.transcript_path ? (
                                         <a href={appData.transcript_path} target="_blank" className="block p-4 border rounded hover:bg-gray-50 text-center">
                                             <div className="text-2xl mb-2">📜</div>
-                                            <div className="text-sm font-bold text-blue-600">Transcript</div>
+                                            <div className="text-sm font-bold text-primary-600">Transcript</div>
                                             <span className="text-xs text-gray-500">View Document</span>
                                         </a>
                                     ) : <div className="p-4 border border-dashed rounded text-center text-gray-400">No Transcript</div>}
@@ -117,7 +138,7 @@ export default function Show({ application }: any) {
                                     {appData.english_test_path ? (
                                         <a href={appData.english_test_path} target="_blank" className="block p-4 border rounded hover:bg-gray-50 text-center">
                                             <div className="text-2xl mb-2">🗣️</div>
-                                            <div className="text-sm font-bold text-blue-600">English Test</div>
+                                            <div className="text-sm font-bold text-primary-600">English Test</div>
                                             <span className="text-xs text-gray-500">View Document</span>
                                         </a>
                                     ) : <div className="p-4 border border-dashed rounded text-center text-gray-400">No English Test</div>}
@@ -127,7 +148,7 @@ export default function Show({ application }: any) {
                             <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                                 <h4 className="font-bold border-b pb-2 mb-4">Admin Notes</h4>
                                 <textarea
-                                    className="w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                                    className="w-full border-gray-300 focus:border-primary-500 focus:ring-primary-500 rounded-md shadow-sm"
                                     rows={4}
                                     value={data.notes}
                                     onChange={(e) => setData('notes', e.target.value)}

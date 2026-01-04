@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, Link } from '@inertiajs/react';
 import { useState } from 'react';
 import Modal from '@/Components/Modal';
 import PrimaryButton from '@/Components/PrimaryButton';
@@ -77,7 +77,12 @@ export default function Applications({ applications }: { applications: any[] }) 
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
-                            <h3 className="text-lg font-bold mb-6">Student Applications</h3>
+                            <div className="flex justify-between items-center mb-6">
+                                <h3 className="text-lg font-bold">Student Applications</h3>
+                                <Link href={route('admin.applications.create')} className="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-bold hover:bg-primary-700 transition">
+                                    Add Application
+                                </Link>
+                            </div>
 
                             <div className="overflow-x-auto">
                                 <table className="min-w-full divide-y divide-gray-200">
@@ -109,7 +114,9 @@ export default function Applications({ applications }: { applications: any[] }) 
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                    <button onClick={() => openEditModal(app)} className="text-indigo-600 hover:text-indigo-900 mr-4">Review</button>
+                                                    <Link href={route('admin.applications.show', app.id)} className="text-primary-600 hover:text-primary-900 mr-4">View</Link>
+                                                    <Link href={route('admin.applications.edit', app.id)} className="text-green-600 hover:text-green-900 mr-4">Edit</Link>
+                                                    <button onClick={() => openEditModal(app)} className="text-indigo-600 hover:text-indigo-900 mr-4">Quick Status</button>
                                                     <button onClick={() => openDeleteModal(app)} className="text-red-600 hover:text-red-900">Delete</button>
                                                 </td>
                                             </tr>
@@ -135,7 +142,7 @@ export default function Applications({ applications }: { applications: any[] }) 
                             id="status"
                             value={data.status}
                             onChange={(e) => setData('status', e.target.value)}
-                            className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                            className="mt-1 block w-full border-gray-300 focus:border-primary-500 focus:ring-primary-500 rounded-md shadow-sm"
                         >
                             <option value="draft">Draft</option>
                             <option value="submitted">Submitted</option>
@@ -152,7 +159,7 @@ export default function Applications({ applications }: { applications: any[] }) 
                             id="notes"
                             value={data.notes}
                             onChange={(e) => setData('notes', e.target.value)}
-                            className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                            className="mt-1 block w-full border-gray-300 focus:border-primary-500 focus:ring-primary-500 rounded-md shadow-sm"
                             rows={4}
                         />
                         <InputError message={errors.notes} className="mt-2" />

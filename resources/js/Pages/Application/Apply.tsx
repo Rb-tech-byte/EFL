@@ -111,7 +111,7 @@ export default function Apply({ program, application, auth }: any) {
                             <select
                                 value={data.data.gender}
                                 onChange={e => updateField('gender', e.target.value)}
-                                className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                                className="mt-1 block w-full border-gray-300 focus:border-primary-500 focus:ring-primary-500 rounded-md shadow-sm"
                             >
                                 <option value="">Select Gender</option>
                                 <option value="Male">Male</option>
@@ -132,7 +132,7 @@ export default function Apply({ program, application, auth }: any) {
                             <textarea
                                 value={data.data.address}
                                 onChange={e => updateField('address', e.target.value)}
-                                className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                                className="mt-1 block w-full border-gray-300 focus:border-primary-500 focus:ring-primary-500 rounded-md shadow-sm"
                             />
                         </div>
                     </div>
@@ -169,7 +169,7 @@ export default function Apply({ program, application, auth }: any) {
                             <textarea
                                 value={data.data.statement}
                                 onChange={e => updateField('statement', e.target.value)}
-                                className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm h-32"
+                                className="mt-1 block w-full border-gray-300 focus:border-primary-500 focus:ring-primary-500 rounded-md shadow-sm h-32"
                                 placeholder="Why do you want to study this program?"
                             />
                         </div>
@@ -242,13 +242,13 @@ export default function Apply({ program, application, auth }: any) {
                     <div className="mb-8">
                         <div className="flex justify-between mb-2">
                             {steps.map((step, index) => (
-                                <div key={index} className={`text-sm font-medium ${index + 1 === data.current_step ? 'text-indigo-600' : 'text-gray-500'}`}>
+                                <div key={index} className={`text-sm font-medium ${index + 1 === data.current_step ? 'text-primary-600' : 'text-gray-500'}`}>
                                     {index + 1}. {step}
                                 </div>
                             ))}
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2.5">
-                            <div className="bg-indigo-600 h-2.5 rounded-full transition-all duration-300" style={{ width: `${(data.current_step / steps.length) * 100}%` }}></div>
+                            <div className="bg-primary-600 h-2.5 rounded-full transition-all duration-300" style={{ width: `${(data.current_step / steps.length) * 100}%` }}></div>
                         </div>
                     </div>
 
@@ -265,7 +265,7 @@ export default function Apply({ program, application, auth }: any) {
                                     Next Step
                                 </PrimaryButton>
                             ) : (
-                                <PrimaryButton onClick={finalSubmit} disabled={processing} className="bg-green-600 hover:bg-green-700">
+                                <PrimaryButton onClick={finalSubmit} disabled={processing} className="bg-primary-600 hover:bg-primary-700">
                                     Submit Application
                                 </PrimaryButton>
                             )}

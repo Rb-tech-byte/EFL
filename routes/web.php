@@ -91,7 +91,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('users', \App\Http\Controllers\Admin\UserController::class)->except(['create', 'edit', 'show'])->names('admin.users');
         Route::resource('universities', \App\Http\Controllers\Admin\UniversityController::class)->except(['create', 'edit', 'show'])->names('admin.universities');
         Route::resource('programs', \App\Http\Controllers\Admin\ProgramController::class)->except(['create', 'edit', 'show'])->names('admin.programs');
-        Route::resource('applications', \App\Http\Controllers\Admin\ApplicationController::class)->only(['index', 'show', 'update', 'destroy'])->names('admin.applications');
+        Route::resource('applications', \App\Http\Controllers\Admin\ApplicationController::class)->names('admin.applications');
         Route::resource('scholarships', \App\Http\Controllers\Admin\ScholarshipController::class)->only(['index', 'store', 'update', 'destroy'])->names('admin.scholarships');
 
         // Settings Routes

@@ -64,17 +64,41 @@ class DashboardController extends Controller
             ->get()
             ->map(function ($app) {
                 return [
+                    'id' => $app->id,
                     'university' => $app->program?->university?->name ?? 'Unknown University',
+                    'university_logo' => $app->program?->university?->logo_url ?? null,
                     'program' => $app->program?->title ?? 'Unknown Program',
-                    'status' => ucfirst(str_replace('_', ' ', $app->status)),
-                    'date' => $app->created_at->diffForHumans(),
+                    'program_id' => $app->program_id,
+                    'status' => $app->status,
+                    'status_label' => ucfirst(str_replace('_', ' ', $app->status)),
+                    'date' => $app->created_at->format('M d, Y'),
                     'statusColor' => $this->getStatusColor($app->status),
+                    'data' => $app->data, // For preview
                 ];
             });
+
+        // Mock Messages
+        $messages = [
+            ['id' => 1, 'sender' => 'Admissions Team', 'subject' => 'Welcome to Your Portal', 'preview' => 'Please complete your profile to start applying...', 'date' => '1 day ago', 'is_read' => false],
+            ['id' => 2, 'sender' => 'System', 'subject' => 'Profile Updated', 'preview' => 'You successfully updated your contact details.', 'date' => '2 days ago', 'is_read' => true],
+        ];
+
+        // Recommended Universities
+        $universities = University::inRandomOrder()->take(4)->get()->map(function ($uni) {
+            return [
+                'id' => $uni->id,
+                'name' => $uni->name,
+                'logo' => $uni->logo_url, // helper or direct
+                'location' => $uni->country,
+                'slug' => $uni->slug ?? $uni->id,
+            ];
+        });
 
         return Inertia::render('Student/Dashboard', [
             'stats' => $stats,
             'recentApplications' => $recentApplications,
+            'messages' => $messages,
+            'universities' => $universities,
             'userName' => $user->name,
         ]);
     }

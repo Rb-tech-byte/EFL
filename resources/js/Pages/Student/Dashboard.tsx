@@ -1,115 +1,212 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, usePage } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
+import { useState } from 'react';
+import Modal from '@/Components/Modal';
+import SecondaryButton from '@/Components/SecondaryButton';
+import PrimaryButton from '@/Components/PrimaryButton';
 
-export default function Dashboard({ stats, recentApplications, userName }: { stats: any[], recentApplications: any[], userName: string }) {
-    const { auth } = usePage().props as any;
-    const user = auth.user;
+export default function Dashboard({ stats, recentApplications, messages, universities, userName }: any) {
+    const [previewApp, setPreviewApp] = useState<any>(null);
 
-    // Stats and recentApplications passed from controller
+    const openPreview = (app: any) => {
+        setPreviewApp(app);
+    };
 
+    const closePreview = () => {
+        setPreviewApp(null);
+    };
 
     return (
-        <AuthenticatedLayout
-            header="Student Dashboard"
-        >
+        <AuthenticatedLayout header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Student Dashboard</h2>}>
             <Head title="Dashboard" />
 
-            <div className="space-y-8">
-                {/* Welcome Section */}
-                <div className="bg-gradient-to-r from-primary-600 to-primary-800 rounded-3xl p-8 text-white relative overflow-hidden shadow-lg shadow-primary-900/20">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full -mr-16 -mt-16 blur-2xl"></div>
-                    <div className="relative z-10">
-                        <h1 className="text-3xl font-display font-bold mb-2">Welcome back, {userName || user.name}! 👋</h1>
-                        <p className="text-blue-100 max-w-xl">You have <span className="font-bold text-white">2 upcoming deadlines</span> this week. Keep up the great work on your applications.</p>
-                        <div className="mt-6">
-                            <button className="px-6 py-2 bg-white text-primary-700 font-bold rounded-lg shadow-sm hover:bg-blue-50 transition">
-                                View Action Plan
-                            </button>
-                        </div>
-                    </div>
-                </div>
+            <div className="py-12">
+                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
-                {/* Stats Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {stats.map((stat, idx) => (
-                        <div key={idx} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                            <div className="flex items-center justify-between mb-4">
-                                <div className={`w-12 h-12 rounded-xl ${stat.color} flex items-center justify-center text-xl`}>
+                    {/* Welcome & Stats */}
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        {stats.map((stat: any, index: number) => (
+                            <div key={index} className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 flex items-center justify-between">
+                                <div>
+                                    <div className="text-gray-500 text-sm font-medium">{stat.label}</div>
+                                    <div className="text-2xl font-bold text-gray-800">{stat.value}</div>
+                                </div>
+                                <div className={`p-3 rounded-full ${stat.color} bg-opacity-10 text-xl`}>
                                     {stat.icon}
                                 </div>
-                                <span className="text-2xl font-bold text-gray-900">{stat.value}</span>
                             </div>
-                            <div className="text-gray-500 font-medium text-sm">{stat.label}</div>
-                        </div>
-                    ))}
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Recent Activities / Applications */}
-                    <div className="lg:col-span-2 space-y-6">
-                        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                            <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-                                <h3 className="font-bold text-lg text-gray-800">Recent Applications</h3>
-                                <a href="#" className="text-primary-600 text-sm font-semibold hover:text-primary-700">View All</a>
-                            </div>
-                            <div className="divide-y divide-gray-50">
-                                {recentApplications.map((app, idx) => (
-                                    <div key={idx} className="p-6 flex items-center justify-between hover:bg-gray-50 transition-colors">
-                                        <div className="flex items-center space-x-4">
-                                            <div className="w-10 h-10 rounded-lg bg-gray-100 flex-shrink-0 flex items-center justify-center text-lg">
-                                                🏫
-                                            </div>
-                                            <div>
-                                                <div className="font-bold text-gray-900">{app.university}</div>
-                                                <div className="text-sm text-gray-500">{app.program}</div>
-                                            </div>
-                                        </div>
-                                        <div className="text-right">
-                                            <div className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${app.statusColor}`}>
-                                                {app.status}
-                                            </div>
-                                            <div className="text-xs text-gray-400 mt-1">{app.date}</div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
+                        ))}
                     </div>
 
-                    {/* Recommended / Sidebar Widgets */}
-                    <div className="space-y-6">
-                        {/* Profile Completeness */}
-                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                            <h3 className="font-bold text-lg text-gray-800 mb-4">Profile Completeness</h3>
-                            <div className="relative pt-1">
-                                <div className="flex mb-2 items-center justify-between">
-                                    <div className="text-right">
-                                        <span className="text-xs font-semibold inline-block text-primary-600">
-                                            85%
-                                        </span>
-                                    </div>
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                        {/* Applications Section (Left Column) */}
+                        <div className="lg:col-span-2 space-y-6">
+                            <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                                <div className="flex justify-between items-center mb-4">
+                                    <h3 className="text-lg font-bold text-gray-900">My Applications</h3>
+                                    <Link href={route('programs.index')} className="text-sm text-primary-600 hover:text-primary-700 font-medium">Find Programs →</Link>
                                 </div>
-                                <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-primary-100">
-                                    <div style={{ width: "85%" }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary-500"></div>
+
+                                <div className="space-y-4">
+                                    {recentApplications.length === 0 ? (
+                                        <div className="text-center py-8 text-gray-500">
+                                            <p>You haven't started any applications yet.</p>
+                                            <Link href={route('programs.index')} className="mt-2 inline-block text-primary-600 hover:underline">Browse Programs</Link>
+                                        </div>
+                                    ) : (
+                                        recentApplications.map((app: any) => (
+                                            <div key={app.id} className="border rounded-lg p-4 hover:shadow-md transition bg-gray-50 md:bg-white flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                                <div className="flex items-start gap-4">
+                                                    {app.university_logo ? (
+                                                        <img src={app.university_logo} alt="Logo" className="w-12 h-12 object-contain rounded bg-white p-1 border" />
+                                                    ) : (
+                                                        <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center text-xl">🏛️</div>
+                                                    )}
+                                                    <div>
+                                                        <h4 className="font-bold text-gray-900">{app.program}</h4>
+                                                        <p className="text-sm text-gray-600">{app.university}</p>
+                                                        <div className="flex items-center gap-2 mt-1">
+                                                            <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${app.statusColor}`}>
+                                                                {app.status_label}
+                                                            </span>
+                                                            <span className="text-xs text-gray-400">• {app.date}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex gap-2 w-full md:w-auto">
+                                                    {app.status === 'draft' ? (
+                                                        <Link
+                                                            href={route('application.create', { program_id: app.program_id })}
+                                                            className="w-full md:w-auto text-center px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded hover:bg-primary-700 transition"
+                                                        >
+                                                            Continue
+                                                        </Link>
+                                                    ) : (
+                                                        <button
+                                                            onClick={() => openPreview(app)}
+                                                            className="w-full md:w-auto px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded hover:bg-gray-50 transition"
+                                                        >
+                                                            View Preview
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        ))
+                                    )}
                                 </div>
-                                <p className="text-sm text-gray-500 mb-4">Add your language test scores to reach 100%.</p>
-                                <button className="w-full py-2 text-sm font-semibold text-primary-600 border border-primary-200 rounded-lg hover:bg-primary-50 transition-colors">
-                                    Complete Profile
-                                </button>
                             </div>
                         </div>
 
-                        {/* Top Destinations */}
-                        <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-6 text-white text-center">
-                            <h3 className="font-bold text-lg mb-2">Study in the UK</h3>
-                            <p className="text-indigo-100 text-sm mb-4">Discover top universities and scholarships available for international students.</p>
-                            <button className="px-4 py-2 bg-white text-indigo-600 text-sm font-bold rounded-lg shadow hover:bg-gray-100 transition">
-                                Explore Options
-                            </button>
+                        {/* Sidebar (Right Column) */}
+                        <div className="space-y-6">
+
+                            {/* Messages */}
+                            <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                                <h3 className="text-lg font-bold text-gray-900 mb-4">Messages</h3>
+                                <div className="space-y-3">
+                                    {messages.map((msg: any) => (
+                                        <div key={msg.id} className={`p-3 rounded-lg border-l-4 ${msg.is_read ? 'border-gray-300 bg-gray-50' : 'border-primary-500 bg-primary-50'}`}>
+                                            <div className="flex justify-between items-start mb-1">
+                                                <span className="font-bold text-xs text-gray-700">{msg.sender}</span>
+                                                <span className="text-xs text-gray-400">{msg.date}</span>
+                                            </div>
+                                            <p className="text-sm font-semibold text-gray-900">{msg.subject}</p>
+                                            <p className="text-xs text-gray-600 truncate">{msg.preview}</p>
+                                        </div>
+                                    ))}
+                                    <div className="text-center pt-2">
+                                        <Link href={route('student.messages')} className="text-xs text-primary-600 hover:text-primary-800 font-medium">View All Messages</Link>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Universities */}
+                            <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                                <h3 className="text-lg font-bold text-gray-900 mb-4">Explore Universities</h3>
+                                <div className="space-y-4">
+                                    {universities.map((uni: any) => (
+                                        <div key={uni.id} className="flex items-center gap-3">
+                                            {uni.logo ? (
+                                                <img src={uni.logo} alt={uni.name} className="w-10 h-10 object-contain rounded border" />
+                                            ) : (
+                                                <div className="w-10 h-10 bg-gray-100 rounded flex items-center justify-center text-lg">🎓</div>
+                                            )}
+                                            <div className="flex-1 min-w-0">
+                                                <h4 className="text-sm font-bold text-gray-900 truncate">{uni.name}</h4>
+                                                <p className="text-xs text-gray-500">{uni.location}</p>
+                                            </div>
+                                            <Link href={route('universities.show', uni.slug)} className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded">
+                                                View
+                                            </Link>
+                                        </div>
+                                    ))}
+                                    <div className="text-center pt-2">
+                                        <Link href={route('student.universities')} className="text-xs text-primary-600 hover:text-primary-800 font-medium">Browse All</Link>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
+
+            {/* Application Preview Modal */}
+            <Modal show={!!previewApp} onClose={closePreview}>
+                <div className="p-6">
+                    {previewApp && (
+                        <>
+                            <div className="flex justify-between items-start mb-4 border-b pb-2">
+                                <div>
+                                    <h2 className="text-xl font-bold text-gray-900">Application Preview</h2>
+                                    <p className="text-sm text-gray-500">#{previewApp.id} - {previewApp.university}</p>
+                                </div>
+                                <span className={`px-2 py-1 text-xs font-bold rounded-full ${previewApp.statusColor}`}>{previewApp.status_label}</span>
+                            </div>
+
+                            <div className="space-y-4 max-h-[70vh] overflow-y-auto">
+                                <div className="grid grid-cols-2 gap-4 text-sm">
+                                    <div><span className="font-semibold block text-gray-700">Program:</span> {previewApp.program}</div>
+                                    <div><span className="font-semibold block text-gray-700">Submitted:</span> {previewApp.date}</div>
+                                </div>
+
+                                {previewApp.data && (
+                                    <>
+                                        <div className="bg-gray-50 p-4 rounded">
+                                            <h3 className="font-bold text-sm mb-2 text-gray-800">Statement of Purpose</h3>
+                                            <p className="text-sm text-gray-600 whitespace-pre-wrap max-h-32 overflow-y-auto">{previewApp.data.statement || "No statement."}</p>
+                                        </div>
+
+                                        <div>
+                                            <h3 className="font-bold text-sm mb-2 text-gray-800">Attached Documents</h3>
+                                            <ul className="space-y-2">
+                                                <li className="flex items-center justify-between bg-white border p-2 rounded text-sm">
+                                                    <span className="flex items-center gap-2">🛂 Passport</span>
+                                                    {previewApp.data.passport_path ? <a href={previewApp.data.passport_path} target="_blank" className="text-primary-600 hover:underline">View</a> : <span className="text-gray-400">Missing</span>}
+                                                </li>
+                                                <li className="flex items-center justify-between bg-white border p-2 rounded text-sm">
+                                                    <span className="flex items-center gap-2">📜 Transcripts</span>
+                                                    {previewApp.data.transcript_path ? <a href={previewApp.data.transcript_path} target="_blank" className="text-primary-600 hover:underline">View</a> : <span className="text-gray-400">Missing</span>}
+                                                </li>
+                                                <li className="flex items-center justify-between bg-white border p-2 rounded text-sm">
+                                                    <span className="flex items-center gap-2">🗣️ English Test</span>
+                                                    {previewApp.data.english_test_path ? <a href={previewApp.data.english_test_path} target="_blank" className="text-primary-600 hover:underline">View</a> : <span className="text-gray-400">Missing</span>}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+
+                            <div className="mt-6 flex justify-end">
+                                <SecondaryButton onClick={closePreview}>Close Preview</SecondaryButton>
+                            </div>
+                        </>
+                    )}
+                </div>
+            </Modal>
         </AuthenticatedLayout>
     );
 }
