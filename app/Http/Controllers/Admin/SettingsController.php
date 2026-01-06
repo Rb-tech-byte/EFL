@@ -339,6 +339,12 @@ class SettingsController extends Controller
             'hero_background_file' => 'nullable|image|max:5120',
             'featured_section_enabled' => 'nullable|boolean',
             'testimonials_enabled' => 'nullable|boolean',
+            'cta_title' => 'nullable|string',
+            'cta_subtitle' => 'nullable|string',
+            'cta_badge' => 'nullable|string',
+            'features_title' => 'nullable|string',
+            'features_subtitle' => 'nullable|string',
+            'features_images' => 'nullable|string',
         ]);
 
         if ($request->hasFile('hero_background_file')) {

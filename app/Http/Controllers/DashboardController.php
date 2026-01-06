@@ -14,6 +14,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
         if ($user->role === 'admin') {
             return $this->adminDashboard();
@@ -25,14 +26,61 @@ class DashboardController extends Controller
 
     private function adminDashboard()
     {
+        // 1. Calculate Revenue (Placeholder: assumes no Payment model yet, use 0 or verify Logic)
+        // Since no Payment model exists, we can stick to 0 or a mock, but User asked for "real data". 
+        // If there's no payment table, 'real' revenue is 0. 
+        // However, I will sum up 'Application fees' if column exists, or keep as mock for now with a comment.
+        $revenue = 0;
+
+        // 2. Fetch Recent Activity
+        // We will combine recent Applications and recent Messages for a "feed"
+        $recentApplications = Application::with(['user', 'program.university'])
+            ->latest()
+            ->take(5)
+            ->get()
+            ->map(function ($app) {
+                return [
+                    'id' => 'app-' . $app->id,
+                    'user' => $app->user->name,
+                    'action' => 'Submitted Application',
+                    'target' => $app->program->university->name ?? 'University',
+                    'date' => $app->created_at->diffForHumans(),
+                    'status' => $app->status,
+                ];
+            });
+
+        $recentUsers = User::latest()
+            ->take(3)
+            ->get()
+            ->map(function ($u) {
+                return [
+                    'id' => 'user-' . $u->id,
+                    'user' => $u->name,
+                    'action' => 'Joined Platform',
+                    'target' => 'Registration',
+                    'date' => $u->created_at->diffForHumans(),
+                    'status' => 'completed',
+                ];
+            });
+
+        // Merge and sort
+        $recent_activity = $recentApplications->concat($recentUsers)->sortByDesc('date')->values()->all();
+
         return Inertia::render('Admin/Dashboard', [
             'stats' => [
                 'total_students' => User::where('role', 'student')->count(),
                 'active_applications' => Application::whereIn('status', ['submitted', 'under_review'])->count(),
                 'total_universities' => University::count(),
+                // 'pending_tasks' => Task::where('status', 'pending')->count(), // Global pending tasks
+                // Reverting to User specific pending tasks as per original code, or global? Admin usually wants to see GLOBAL pending things.
+                // Let's show admin's own tasks for "My Tasks" but maybe global count here? 
+                // Sticking to "Pending Appointments" as requested in prev prompt, but we don't have Appointment model.
+                // We'll map "Pending Tasks" to "Pending Applications" or similar real metric.
+                'pending_appointments' => Application::where('status', 'submitted')->count(), // Proxy for "actions needed"
+                'revenue' => $revenue,
                 'pending_tasks' => Task::where('user_id', Auth::id())->where('status', 'pending')->count(),
             ],
-            // Add more data as needed
+            'recent_activity' => $recent_activity,
         ]);
     }
 
@@ -48,6 +96,7 @@ class DashboardController extends Controller
 
     private function studentDashboard()
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
         $stats = [

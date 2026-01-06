@@ -62,10 +62,12 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('description')->nullable();
-            $table->dateTime('start_date');
-            $table->dateTime('end_date')->nullable();
-            $table->string('type'); // webinar, in-person
-            $table->string('link')->nullable(); // webinar link
+            $table->dateTime('start_time'); // Renamed from start_date
+            $table->dateTime('end_time')->nullable(); // Renamed from end_date
+            $table->string('location')->nullable();
+            $table->string('type')->default('webinar');
+            $table->string('link')->nullable();
+            $table->boolean('is_public')->default(true);
             $table->timestamps();
         });
 

@@ -47,7 +47,7 @@ export default function MegaMenu({ scrolled, menuItems = [] }: MegaMenuProps) {
     const activeMenuItems = menuItems.filter(item => item.is_active);
 
     return (
-        <div className="hidden md:flex items-center h-full">
+        <div className="flex items-center h-full">
             {activeMenuItems.map((item) => (
                 <div
                     key={item.id}

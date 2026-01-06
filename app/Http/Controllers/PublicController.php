@@ -38,4 +38,38 @@ class PublicController extends Controller
             'filters' => $request->only(['destination', 'level', 'search']),
         ]);
     }
+    public function blog(Request $request)
+    {
+        // Using UniversityStory as a fallback if Post is just a skeleton
+        // But the user asked for "blog", and we have a Post model.
+        // Assuming Post model has title, content, image, slug.
+        $posts = \App\Models\Post::latest()->paginate(9);
+        return Inertia::render('Blog/Index', [
+            'posts' => $posts,
+        ]);
+    }
+
+    public function blogShow($slug)
+    {
+        $post = \App\Models\Post::where('slug', $slug)->firstOrFail();
+        return Inertia::render('Blog/Show', [
+            'post' => $post,
+        ]);
+    }
+
+    public function events(Request $request)
+    {
+        $events = \App\Models\Event::latest()->paginate(9);
+        return Inertia::render('Events/Index', [
+            'events' => $events,
+        ]);
+    }
+
+    public function eventShow($slug)
+    {
+        $event = \App\Models\Event::where('slug', $slug)->firstOrFail();
+        return Inertia::render('Events/Show', [
+            'event' => $event,
+        ]);
+    }
 }

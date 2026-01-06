@@ -33,6 +33,8 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
+                'unreadCount' => $request->user() ? \App\Models\Message::where('recipient_id', $request->user()->id)->where('is_read', false)->count() : 0,
+                'cartCount' => count(session()->get('cart', [])),
             ],
             'menuItems' => \App\Models\MenuItem::with(['columns.links'])
                 ->where('is_active', true)

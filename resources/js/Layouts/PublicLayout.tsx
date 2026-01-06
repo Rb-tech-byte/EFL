@@ -22,8 +22,8 @@ export default function PublicLayout({ children }: PropsWithChildren) {
     const navLinks = [
         { name: 'Universities', href: '/universities' },
         { name: 'Programs', href: '/programs' },
-        { name: 'Services', href: '/services' },
-        { name: 'Stories', href: '/stories' },
+        { name: 'Shop', href: '/shop' },
+        { name: 'Blog', href: '/blog' },
         { name: 'Events', href: '/events' },
     ];
 
@@ -46,23 +46,50 @@ export default function PublicLayout({ children }: PropsWithChildren) {
                             </Link>
                         </div>
 
-                        {/* Desktop Menu - Mega Menu */}
-                        <div className="hidden md:flex items-center h-full mx-8">
+                        {/* Desktop Menu - Mega Menu & Standard Links */}
+                        <div className="flex items-center h-full mx-8 space-x-6">
                             <MegaMenu scrolled={scrolled} menuItems={menuItems} />
+
+                            <Link href="/shop" className={`text-sm font-medium transition-colors hover:text-primary-600 ${scrolled ? 'text-gray-800' : 'text-gray-900'}`}>
+                                Shop
+                            </Link>
+                            <Link href="/blog" className={`text-sm font-medium transition-colors hover:text-primary-600 ${scrolled ? 'text-gray-800' : 'text-gray-900'}`}>
+                                Blog
+                            </Link>
+                            <Link href="/events" className={`text-sm font-medium transition-colors hover:text-primary-600 ${scrolled ? 'text-gray-800' : 'text-gray-900'}`}>
+                                Events
+                            </Link>
                         </div>
 
-                        {/* Auth Buttons */}
-                        <div className="hidden md:flex items-center space-x-4">
+                        {/* Auth Buttons & Cart */}
+                        <div className="hidden md:flex items-center space-x-6">
+                            {/* Shopping Cart */}
+                            <Link
+                                href="/cart"
+                                className={`relative p-2 transition-colors rounded-full hover:bg-gray-100 ${scrolled ? 'text-gray-600' : 'text-gray-900'}`}
+                            >
+                                {auth.cartCount > 0 && (
+                                    <span className="absolute top-0 right-0 w-4 h-4 bg-primary-600 rounded-full border-2 border-white text-[10px] text-white flex items-center justify-center font-bold">
+                                        {auth.cartCount}
+                                    </span>
+                                )}
+                                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                </svg>
+                            </Link>
+
+                            <div className="h-6 w-px bg-gray-200"></div>
+
                             {auth.user ? (
                                 <Link href="/dashboard" className="btn-primary">
                                     Dashboard
                                 </Link>
                             ) : (
                                 <>
-                                    <Link href="/login" className="px-5 py-2.5 text-sm font-semibold text-gray-700 hover:text-primary-600 transition-colors">
+                                    <Link href="/login" className={`text-sm font-semibold hover:text-primary-600 transition-colors ${scrolled ? 'text-gray-700' : 'text-gray-900'}`}>
                                         Log in
                                     </Link>
-                                    <Link href="/register" className="btn-primary">
+                                    <Link href="/register" className="btn-primary shadow-lg shadow-primary-500/20">
                                         Get Started
                                     </Link>
                                 </>

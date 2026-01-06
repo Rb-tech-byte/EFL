@@ -121,9 +121,10 @@ export default function UniversityShow({ university, programs, relatedUniversiti
                             </div>
 
                             {/* Description */}
-                            <p className="text-gray-600 leading-relaxed mb-6">
-                                {university.description || `${university.name} is a leading institution committed to academic excellence and innovation. We provide world-class education and research opportunities for international students.`}
-                            </p>
+                            <div
+                                className="text-gray-600 leading-relaxed mb-6 prose prose-blue prose-sm max-w-none"
+                                dangerouslySetInnerHTML={{ __html: university.description || `<p>${university.name} is a leading institution committed to academic excellence and innovation. We provide world-class education and research opportunities for international students.</p>` }}
+                            />
 
                             {/* Ranking Badges */}
                             <div className="flex flex-wrap gap-4 mb-6">
