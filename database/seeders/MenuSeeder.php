@@ -13,6 +13,7 @@ class MenuSeeder extends Seeder
     public function run(): void
     {
         // Clear existing menu data (delete in correct order to avoid FK constraints)
+        /** @var \Illuminate\Database\DatabaseManager DB */
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         MenuLink::truncate();
         MenuColumn::truncate();
