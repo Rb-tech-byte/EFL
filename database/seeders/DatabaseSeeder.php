@@ -19,28 +19,37 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         // Admin User
-        User::factory()->create([
-            'name' => 'Super Admin',
-            'email' => 'admin@efl.com',
-            'password' => Hash::make('password'),
-            'role' => 'admin',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@efl.com'],
+            [
+                'name' => 'Super Admin',
+                'password' => Hash::make('password'),
+                'role' => 'admin',
+                'email_verified_at' => now(),
+            ]
+        );
 
         // Staff User
-        User::factory()->create([
-            'name' => 'Staff Member',
-            'email' => 'staff@efl.com',
-            'password' => Hash::make('password'),
-            'role' => 'staff',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'staff@efl.com'],
+            [
+                'name' => 'Staff Member',
+                'password' => Hash::make('password'),
+                'role' => 'staff',
+                'email_verified_at' => now(),
+            ]
+        );
 
         // Student User
-        User::factory()->create([
-            'name' => 'John Doe',
-            'email' => 'student@efl.com',
-            'password' => Hash::make('password'),
-            'role' => 'student',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'student@efl.com'],
+            [
+                'name' => 'John Doe',
+                'password' => Hash::make('password'),
+                'role' => 'student',
+                'email_verified_at' => now(),
+            ]
+        );
 
         // Call all seeders in order
         $this->call([
