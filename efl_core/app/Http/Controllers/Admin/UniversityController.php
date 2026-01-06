@@ -95,16 +95,20 @@ class UniversityController extends Controller
             'campus_life_content' => 'nullable|string',
         ]);
 
-        $logo = $request->logo;
+        $logo = $university->logo; // Keep existing logo by default
         if ($request->hasFile('logo_file')) {
             $path = $request->file('logo_file')->store('universities/logos', 'public');
             $logo = '/storage/' . $path;
+        } elseif ($request->filled('logo')) {
+            $logo = $request->logo;
         }
 
-        $heroImage = $request->hero_image;
+        $heroImage = $university->hero_image; // Keep existing hero image by default
         if ($request->hasFile('hero_image_file')) {
             $path = $request->file('hero_image_file')->store('universities/heroes', 'public');
             $heroImage = '/storage/' . $path;
+        } elseif ($request->filled('hero_image')) {
+            $heroImage = $request->hero_image;
         }
 
         $university->update([

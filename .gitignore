@@ -35,9 +35,11 @@ efl_core/fix_env.php
 /package-lock.json
 
 # Public (Frontend) Ignored Files
-public_html/build
-public_html/hot
-public_html/storage
+/build
+/assets
+/hot
+/storage
+/index.html
 
-# Storage Link
-public_html/storage
+# Ignore AI-generated markdown docs
+*.md

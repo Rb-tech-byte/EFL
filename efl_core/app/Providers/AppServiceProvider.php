@@ -14,14 +14,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // 1. Check for Sibling Structure (Local WAMP: efl_core next to public_html)
-        if (is_dir(base_path('../public_html'))) {
-            $this->app->usePublicPath(base_path('../public_html'));
-        }
-        // 2. Check for Nested Structure (Server cPanel: efl_core INSIDE public_html)
-        elseif (file_exists(base_path('../index.php'))) {
-            $this->app->usePublicPath(realpath(base_path('../')));
-        }
+        //
     }
 
     /**
@@ -29,8 +22,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
+
         Schema::defaultStringLength(191);
-        Vite::prefetch(concurrency: 3);
 
         Gate::define('admin', function ($user) {
             return $user->role === 'admin';

@@ -187,7 +187,7 @@ export default function UniversityShow({ university, programs, relatedUniversiti
                                     Apply Now
                                 </Link>
                                 <Link
-                                    href="/contact"
+                                    href="/appointments"
                                     className="bg-white text-[#0a1045] text-center py-4 px-6 rounded-lg font-semibold border-2 border-[#0a1045] hover:bg-gray-50 transition-colors"
                                 >
                                     Ask an Advisor
