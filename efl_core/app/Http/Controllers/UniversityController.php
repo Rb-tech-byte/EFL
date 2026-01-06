@@ -9,6 +9,15 @@ use Inertia\Inertia;
 
 class UniversityController extends Controller
 {
+    public function index()
+    {
+        $universities = University::orderBy('ranking')->paginate(12);
+
+        return Inertia::render('Universities/Index', [
+            'universities' => $universities,
+        ]);
+    }
+
     public function show($slug)
     {
         $university = University::with(['importantDates', 'stories'])

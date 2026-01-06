@@ -19,10 +19,10 @@ export default function Welcome({ auth, universities, scholarships, hero, stats,
     }, [sliderImages.length]);
 
     const quickLinks = [
-        { name: 'Universities', href: '/universities', icon: '🏛️', count: (counts?.universities > 0 ? counts.universities : universities?.length) + '+' },
-        { name: 'Programs', href: '/programs', icon: '🎓', count: (counts?.programs > 0 ? counts.programs : '500') + '+' },
-        { name: 'Scholarships', href: '/scholarships', icon: '💰', count: (counts?.scholarships > 0 ? counts.scholarships : scholarships?.length || '10') + '+' },
-        { name: 'Expert Advice', href: '/appointments', icon: '🤝', count: 'Free' },
+        { name: 'Universities', href: route('universities.index'), icon: '🏛️', count: (counts?.universities > 0 ? counts.universities : universities?.length) + '+' },
+        { name: 'Programs', href: route('programs.index'), icon: '🎓', count: (counts?.programs > 0 ? counts.programs : '500') + '+' },
+        { name: 'Scholarships', href: route('scholarships'), icon: '💰', count: (counts?.scholarships > 0 ? counts.scholarships : scholarships?.length || '10') + '+' },
+        { name: 'Expert Advice', href: route('student.appointments'), icon: '🤝', count: 'Free' },
     ];
 
     return (
@@ -55,10 +55,10 @@ export default function Welcome({ auth, universities, scholarships, hero, stats,
                             <p className="text-lg text-slate-300 mb-8 max-w-2xl leading-relaxed animate-slide-up delay-100" dangerouslySetInnerHTML={{ __html: hero.subtitle }}></p>
 
                             <div className="flex flex-col sm:flex-row gap-5 animate-slide-up delay-200">
-                                <Link href="/register" className="px-10 py-4 bg-primary-600 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl shadow-2xl shadow-primary-500/40 hover:bg-primary-500 hover:scale-105 transition-all text-center">
+                                <Link href={route('register')} className="px-10 py-4 bg-primary-600 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl shadow-2xl shadow-primary-500/40 hover:bg-primary-500 hover:scale-105 transition-all text-center">
                                     Apply Now
                                 </Link>
-                                <Link href="/universities" className="px-10 py-4 bg-white/5 backdrop-blur-md border border-white/10 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl hover:bg-white/10 transition-all text-center">
+                                <Link href={route('universities.index')} className="px-10 py-4 bg-white/5 backdrop-blur-md border border-white/10 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl hover:bg-white/10 transition-all text-center">
                                     Explore Institutes
                                 </Link>
                             </div>
@@ -121,7 +121,7 @@ export default function Welcome({ auth, universities, scholarships, hero, stats,
                             <span className="text-primary-600 font-black tracking-[0.2em] uppercase text-[10px] mb-2 block">Institutions</span>
                             <h2 className="text-3xl md:text-5xl font-display font-bold text-slate-900 leading-tight">Elite Partner <span className="text-primary-600">Universities</span></h2>
                         </div>
-                        <Link href="/universities" className="text-xs font-black uppercase tracking-widest text-primary-600 hover:gap-4 transition-all flex items-center gap-2">
+                        <Link href={route('universities.index')} className="text-xs font-black uppercase tracking-widest text-primary-600 hover:gap-4 transition-all flex items-center gap-2">
                             Browse All <span>→</span>
                         </Link>
                     </div>
@@ -171,7 +171,7 @@ export default function Welcome({ auth, universities, scholarships, hero, stats,
                             </h2>
                             <p className="text-slate-400 text-sm md:text-base font-medium leading-relaxed">Tools designed to accelerate your global academic journey.</p>
                         </div>
-                        <Link href="/blog" className="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-white text-xs font-black uppercase tracking-widest transition-all backdrop-blur-md">
+                        <Link href={route('blog.index')} className="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-white text-xs font-black uppercase tracking-widest transition-all backdrop-blur-md">
                             View All Resources
                         </Link>
                     </div>
@@ -184,7 +184,7 @@ export default function Welcome({ auth, universities, scholarships, hero, stats,
                                 gradient: 'from-blue-500/20 to-indigo-500/20',
                                 iconBg: 'bg-blue-500/10',
                                 iconColor: 'text-blue-400',
-                                href: '/shop',
+                                href: route('shop.index'),
                                 desc: 'Exclusive access to study guides, IELTS journals, and success checklists.'
                             },
                             {
@@ -193,7 +193,7 @@ export default function Welcome({ auth, universities, scholarships, hero, stats,
                                 gradient: 'from-orange-500/20 to-rose-500/20',
                                 iconBg: 'bg-orange-500/10',
                                 iconColor: 'text-orange-400',
-                                href: '/blog',
+                                href: route('blog.index'),
                                 desc: 'Inspiring journeys from students who transitioned to dream universities.'
                             },
                             {
@@ -202,7 +202,7 @@ export default function Welcome({ auth, universities, scholarships, hero, stats,
                                 gradient: 'from-purple-500/20 to-fuchsia-500/20',
                                 iconBg: 'bg-purple-500/10',
                                 iconColor: 'text-purple-400',
-                                href: '/events',
+                                href: route('events.index'),
                                 desc: 'Interactive sessions with university representatives and admission experts.'
                             },
                         ].map((item: any, idx: number) => (
@@ -247,13 +247,13 @@ export default function Welcome({ auth, universities, scholarships, hero, stats,
 
                                     <div className="flex flex-col sm:flex-row justify-center items-center gap-5">
                                         <Link
-                                            href="/register"
+                                            href={route('register')}
                                             className="w-full sm:w-auto px-12 py-5 bg-primary-600 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl shadow-2xl shadow-primary-500/20 hover:bg-primary-500 hover:scale-105 transition-all"
                                         >
                                             Create Account
                                         </Link>
                                         <Link
-                                            href="/login"
+                                            href={route('login')}
                                             className="w-full sm:w-auto px-12 py-5 bg-white text-slate-900 border border-slate-200 font-black text-xs uppercase tracking-[0.2em] rounded-2xl hover:bg-slate-50 hover:scale-105 transition-all shadow-xl"
                                         >
                                             Login Now
@@ -268,13 +268,13 @@ export default function Welcome({ auth, universities, scholarships, hero, stats,
 
                                     <div className="flex flex-col sm:flex-row justify-center items-center gap-5">
                                         <Link
-                                            href="/dashboard"
+                                            href={route('dashboard')}
                                             className="w-full sm:w-auto px-12 py-5 bg-primary-600 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl shadow-2xl shadow-primary-500/20 hover:bg-primary-500 hover:scale-105 transition-all"
                                         >
                                             Go to Dashboard
                                         </Link>
                                         <Link
-                                            href="/appointments"
+                                            href={route('student.appointments')}
                                             className="w-full sm:w-auto px-12 py-5 bg-white text-slate-900 border border-slate-200 font-black text-xs uppercase tracking-[0.2em] rounded-2xl hover:bg-slate-50 hover:scale-105 transition-all shadow-xl flex items-center justify-center gap-2"
                                         >
                                             Talk to Counselor

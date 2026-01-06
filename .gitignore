@@ -1,6 +1,7 @@
 # Environment files
 .env
 .env.backup
+.env.backup.*
 .env.production
 
 # System files
@@ -25,6 +26,13 @@ efl_core/phpunit.result.cache
 efl_core/auth.json
 efl_core/storage/*.key
 efl_core/storage/pail
+
+# Temporary files
+efl_core/check_route.txt
+efl_core/routes.txt
+efl_core/update_env.php
+efl_core/fix_env.php
+/package-lock.json
 
 # Public (Frontend) Ignored Files
 public_html/build

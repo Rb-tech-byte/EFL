@@ -14,10 +14,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Bind the public path if we are in the split structure
-        if (is_dir(base_path('../public_html'))) {
-            $this->app->usePublicPath(base_path('../public_html'));
-        }
+        //
     }
 
     /**

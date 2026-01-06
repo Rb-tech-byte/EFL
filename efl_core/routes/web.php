@@ -6,8 +6,16 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
+use Illuminate\Support\Facades\Storage;
+
 Route::get('/', function () {
-    $universities = \App\Models\University::inRandomOrder()->take(6)->get();
+    $universities = \App\Models\University::inRandomOrder()->take(6)->get()->map(function ($uni) {
+        if ($uni->logo && !str_starts_with($uni->logo, 'http')) {
+            $uni->logo = asset(Storage::url($uni->logo));
+        }
+        return $uni;
+    });
+
     $scholarships = \App\Models\Scholarship::with('university')->latest()->take(3)->get();
 
     // Fetch Homepage Settings
@@ -96,6 +104,7 @@ use App\Http\Controllers\PublicController;
 Route::get('/scholarships', [PublicController::class, 'scholarships'])->name('scholarships');
 Route::get('/programs', [\App\Http\Controllers\PublicProgramsController::class, 'index'])->name('programs.index');
 Route::get('/programs/{slug}', [\App\Http\Controllers\PublicProgramsController::class, 'show'])->name('programs.show');
+Route::get('/universities', [\App\Http\Controllers\UniversityController::class, 'index'])->name('universities.index');
 Route::get('/universities/{slug}', [\App\Http\Controllers\UniversityController::class, 'show'])->name('universities.show');
 Route::get('/blog', [\App\Http\Controllers\PublicController::class, 'blog'])->name('blog.index');
 Route::get('/events', [\App\Http\Controllers\PublicController::class, 'events'])->name('events.index');
@@ -241,7 +250,7 @@ Route::middleware('auth')->group(function () {
     // Student Routes
     Route::middleware('can:student')->group(function () {
         Route::get('/applications', [\App\Http\Controllers\StudentController::class, 'applications'])->name('student.applications');
-        Route::get('/universities', [\App\Http\Controllers\StudentController::class, 'universities'])->name('student.universities');
+        // Route::get('/universities', [\App\Http\Controllers\StudentController::class, 'universities'])->name('student.universities');
 
         // New Student Features
         Route::get('/student/appointments', [\App\Http\Controllers\StudentController::class, 'appointments'])->name('student.appointments');
