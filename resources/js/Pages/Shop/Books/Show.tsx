@@ -14,7 +14,7 @@ export default function ShopShow({ book, userOwnsBook, relatedBooks }: any) {
     };
 
     const [showPurchaseModal, setShowPurchaseModal] = useState(false);
-    const [paymentMethod, setPaymentMethod] = useState('stripe');
+    const [paymentMethod, setPaymentMethod] = useState('pesapal');
     const [couponCode, setCouponCode] = useState('');
 
     const handlePurchase = () => {
@@ -135,7 +135,7 @@ export default function ShopShow({ book, userOwnsBook, relatedBooks }: any) {
                                             <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
                                         </svg>
                                         <span className="font-medium text-gray-900">
-                                            {book.average_rating ? book.average_rating.toFixed(1) : 'N/A'}
+                                            {book.average_rating ? Number(book.average_rating).toFixed(1) : 'N/A'}
                                         </span>
                                         <span className="text-gray-500">({book.reviews_count})</span>
                                     </div>
@@ -199,9 +199,10 @@ export default function ShopShow({ book, userOwnsBook, relatedBooks }: any) {
                         {/* Description */}
                         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
                             <h2 className="text-xl font-bold text-gray-900 mb-4">Description</h2>
-                            <div className="prose max-w-none text-gray-700">
-                                {book.description}
-                            </div>
+                            <div
+                                className="prose max-w-none text-gray-700"
+                                dangerouslySetInnerHTML={{ __html: book.description }}
+                            />
                         </div>
 
                         {/* Additional Info */}
@@ -275,25 +276,48 @@ export default function ShopShow({ book, userOwnsBook, relatedBooks }: any) {
                                 <Link
                                     key={relatedBook.id}
                                     href={`/shop/${relatedBook.slug}`}
-                                    className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300"
+                                    className="group bg-white rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden flex flex-col"
                                 >
-                                    <div className="aspect-[3/4] bg-gray-100">
-                                        {relatedBook.cover_image && (
+                                    <div className="aspect-[3/4.2] bg-gray-50 overflow-hidden relative">
+                                        {relatedBook.cover_image ? (
                                             <img
                                                 src={relatedBook.cover_image}
                                                 alt={relatedBook.title}
-                                                className="w-full h-full object-cover"
+                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                             />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center text-gray-300">
+                                                <svg className="w-12 h-12 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                                </svg>
+                                            </div>
                                         )}
+                                        <div className="absolute top-3 left-3">
+                                            <span className="bg-white/90 backdrop-blur-md text-gray-900 text-[8px] font-black tracking-widest px-2 py-1 rounded-full shadow-sm uppercase">
+                                                {relatedBook.type}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div className="p-3">
-                                        <h3 className="font-semibold text-sm text-gray-900 line-clamp-2 mb-1">
+                                    <div className="p-4 flex-1 flex flex-col">
+                                        <h3 className="font-black text-sm text-gray-900 line-clamp-2 leading-tight mb-1 group-hover:text-primary-600 transition-colors">
                                             {relatedBook.title}
                                         </h3>
-                                        <p className="text-xs text-gray-600 mb-2">{relatedBook.author.name}</p>
-                                        <span className="text-sm font-bold text-primary-600">
-                                            {relatedBook.formatted_price}
-                                        </span>
+                                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-3">
+                                            {relatedBook.author.name}
+                                        </p>
+                                        <div className="mt-auto pt-2 border-t border-gray-50 flex items-center justify-between">
+                                            <span className="text-sm font-black text-primary-600">
+                                                {relatedBook.formatted_price}
+                                            </span>
+                                            <div className="flex items-center gap-1">
+                                                <svg className="w-3 h-3 text-amber-400 fill-current" viewBox="0 0 20 20">
+                                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                                                </svg>
+                                                <span className="text-[10px] font-black text-gray-900">
+                                                    {relatedBook.average_rating ? Number(relatedBook.average_rating).toFixed(1) : '0.0'}
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </Link>
                             ))}
@@ -316,9 +340,9 @@ export default function ShopShow({ book, userOwnsBook, relatedBooks }: any) {
                                     onChange={(e) => setPaymentMethod(e.target.value)}
                                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                                 >
+                                    <option value="pesapal">Pesapal (Mobile Money & Card)</option>
                                     <option value="stripe">Credit Card (Stripe)</option>
                                     <option value="paypal">PayPal</option>
-                                    <option value="credit_card">Credit Card</option>
                                 </select>
                             </div>
 

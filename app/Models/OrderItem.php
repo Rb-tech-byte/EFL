@@ -13,17 +13,15 @@ class OrderItem extends Model
         'order_id',
         'book_id',
         'author_id',
-        'title',
         'price',
-        'quantity',
-        'author_earnings',
-        'platform_commission',
+        'author_earning',
+        'admin_commission',
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
-        'author_earnings' => 'decimal:2',
-        'platform_commission' => 'decimal:2',
+        'author_earning' => 'decimal:2',
+        'admin_commission' => 'decimal:2',
     ];
 
     // Relationships

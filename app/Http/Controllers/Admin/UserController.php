@@ -24,15 +24,25 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:' . User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role' => 'required|string|in:admin,staff,student',
+            'role' => 'required|string|in:admin,staff,student,author',
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
         ]);
+
+        // If role is author, create author profile automatically
+        if ($request->role === 'author') {
+            \App\Models\Author::create([
+                'user_id' => $user->id,
+                'status' => 'approved',
+                'pen_name' => $user->name,
+                'commission_rate' => 30.00,
+            ]);
+        }
 
         return redirect()->back()->with('success', 'User created successfully.');
     }
@@ -42,14 +52,26 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'role' => 'required|string|in:admin,staff,student',
+            'role' => 'required|string|in:admin,staff,student,author',
         ]);
+
+        $oldRole = $user->role;
 
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
             'role' => $request->role,
         ]);
+
+        // If changed to author or role is author and profile missing, create one
+        if ($request->role === 'author' && !$user->authorProfile()->exists()) {
+            \App\Models\Author::create([
+                'user_id' => $user->id,
+                'status' => 'approved',
+                'pen_name' => $user->name,
+                'commission_rate' => 30.00,
+            ]);
+        }
 
         if ($request->filled('password')) {
             $request->validate([

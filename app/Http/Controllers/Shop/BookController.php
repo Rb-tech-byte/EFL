@@ -212,7 +212,7 @@ class BookController extends Controller
             'book_id' => 'required_without:cart|exists:books,id',
             'cart' => 'required_without:book_id|array',
             'cart.*' => 'exists:books,id',
-            'payment_method' => 'required|in:stripe,paypal,credit_card',
+            'payment_method' => 'required|in:pesapal,stripe,paypal,credit_card',
             'coupon_code' => 'nullable|string',
         ]);
 

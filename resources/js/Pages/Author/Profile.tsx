@@ -1,16 +1,27 @@
 import { Head, useForm } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
+interface ProfileForm {
+    _method: string;
+    bio: string;
+    avatar: File | null;
+    website: string;
+    facebook_url: string;
+    twitter_url: string;
+    linkedin_url: string;
+    instagram_url: string;
+}
+
 export default function AuthorProfile({ profile }: any) {
-    const { data, setData, post, processing, errors } = useForm({
+    const { data, setData, post, processing, errors } = useForm<ProfileForm>({
         _method: 'PUT',
         bio: profile.bio || '',
-        avatar: null as File | null,
+        avatar: null,
         website: profile.website || '',
-        facebook_url: profile.facebook_url || '',
-        twitter_url: profile.twitter_url || '',
-        linkedin_url: profile.linkedin_url || '',
-        instagram_url: profile.instagram_url || '',
+        facebook_url: profile.social_links?.facebook || '',
+        twitter_url: profile.social_links?.twitter || '',
+        linkedin_url: profile.social_links?.linkedin || '',
+        instagram_url: profile.social_links?.instagram || '',
     });
 
     const submit = (e: React.FormEvent) => {

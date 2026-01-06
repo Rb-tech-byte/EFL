@@ -93,7 +93,7 @@ export default function Cart({ cart, total, discount, finalTotal, coupon }: any)
                                 <div className="space-y-4 mb-6">
                                     <div className="flex justify-between items-center text-gray-600">
                                         <span>Subtotal</span>
-                                        <span className="font-medium text-gray-900">${total.toFixed(2)}</span>
+                                        <span className="font-medium text-gray-900">${Number(total).toFixed(2)}</span>
                                     </div>
 
                                     {discount > 0 && (
@@ -102,13 +102,13 @@ export default function Cart({ cart, total, discount, finalTotal, coupon }: any)
                                                 <span>Discount</span>
                                                 <button onClick={removeCoupon} className="text-[10px] bg-red-50 text-red-500 px-1 rounded hover:bg-red-100 transition-colors">Remove</button>
                                             </div>
-                                            <span className="font-medium">-${discount.toFixed(2)}</span>
+                                            <span className="font-medium">-${Number(discount).toFixed(2)}</span>
                                         </div>
                                     )}
 
                                     <div className="pt-4 border-t border-gray-100 flex justify-between items-center text-lg font-bold">
                                         <span className="text-gray-900">Total</span>
-                                        <span className="text-primary-600">${finalTotal.toFixed(2)}</span>
+                                        <span className="text-primary-600">${Number(finalTotal).toFixed(2)}</span>
                                     </div>
                                 </div>
 

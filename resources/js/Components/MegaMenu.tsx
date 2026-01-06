@@ -26,9 +26,10 @@ interface MenuItem {
 interface MegaMenuProps {
     scrolled: boolean;
     menuItems?: MenuItem[];
+    dark?: boolean;
 }
 
-export default function MegaMenu({ scrolled, menuItems = [] }: MegaMenuProps) {
+export default function MegaMenu({ scrolled, menuItems = [], dark = false }: MegaMenuProps) {
     const [activeMenu, setActiveMenu] = useState<string | null>(null);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -56,38 +57,37 @@ export default function MegaMenu({ scrolled, menuItems = [] }: MegaMenuProps) {
                     onMouseLeave={handleMouseLeave}
                 >
                     <button
-                        className={`px-4 py-2 font-medium text-sm tracking-wide transition-colors ${scrolled ? 'text-gray-800 hover:text-primary-600' : 'text-gray-900 hover:text-primary-600'
-                            } ${activeMenu === item.name ? 'text-primary-600' : ''}`}
+                        className={`px-4 py-2 text-sm font-black uppercase tracking-widest transition-all duration-300 ${dark || scrolled
+                                ? 'text-gray-300 hover:text-white'
+                                : 'text-gray-900 hover:text-primary-600'
+                            } ${activeMenu === item.name ? (dark || scrolled ? 'text-white' : 'text-primary-600') : ''}`}
                     >
                         {item.name}
                         {/* Underline animation */}
-                        <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-primary-600 transition-transform duration-300 origin-left ${activeMenu === item.name ? 'scale-x-100' : 'scale-x-0'}`}></span>
+                        <span className={`absolute bottom-6 left-4 right-4 h-0.5 bg-primary-500 transition-all duration-300 origin-center ${activeMenu === item.name ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'}`}></span>
                     </button>
 
                     {/* Mega Menu Dropdown */}
                     {item.columns && item.columns.length > 0 && (
                         <div
-                            className={`absolute top-full left-0 w-[600px] bg-white rounded-xl shadow-xl mt-4 p-8 border border-gray-100 transition-all duration-300 origin-top-left z-50 transform ${activeMenu === item.name
-                                ? 'opacity-100 translate-y-0 visible'
-                                : 'opacity-0 translate-y-2 invisible'
+                            className={`absolute top-[80%] left-0 w-[650px] bg-[#0f172a]/95 backdrop-blur-3xl rounded-[2rem] shadow-[0_30px_100px_rgba(0,0,0,0.5)] mt-4 p-10 border border-white/5 transition-all duration-500 origin-top z-50 transform ${activeMenu === item.name
+                                    ? 'opacity-100 translate-y-0 visible scale-100'
+                                    : 'opacity-0 translate-y-4 invisible scale-95'
                                 }`}
-                            style={{ marginLeft: '-100px' }}
+                            style={{ marginLeft: '-150px' }}
                         >
-                            {/* Triangle/Arrow pointing up */}
-                            <div className="absolute -top-2 left-[120px] w-4 h-4 bg-white border-t border-l border-gray-100 transform rotate-45"></div>
-
-                            <div className={`grid gap-8 ${item.columns.length === 1 ? 'grid-cols-1' : item.columns.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
+                            <div className={`grid gap-10 ${item.columns.length === 1 ? 'grid-cols-1' : item.columns.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
                                 {item.columns.map((col) => (
                                     <div key={col.id}>
-                                        <h4 className="font-display font-bold text-gray-900 mb-4 text-sm uppercase tracking-wider">{col.title}</h4>
-                                        <ul className="space-y-3">
+                                        <h4 className="text-[10px] font-black text-primary-400 uppercase tracking-[0.2em] mb-6 px-1">{col.title}</h4>
+                                        <ul className="space-y-4">
                                             {col.links && col.links.map((link) => (
                                                 <li key={link.id}>
                                                     <Link
                                                         href={link.href}
-                                                        className="text-gray-600 hover:text-primary-600 text-sm transition-colors flex items-center group"
+                                                        className="text-gray-300 hover:text-white text-sm font-bold transition-all flex items-center group gap-3"
                                                     >
-                                                        <span className="w-1.5 h-1.5 rounded-full bg-gray-300 mr-2 group-hover:bg-primary-500 transition-colors"></span>
+                                                        <span className="w-1.5 h-1.5 rounded-full bg-white/10 group-hover:bg-primary-500 group-hover:scale-150 transition-all"></span>
                                                         {link.name}
                                                     </Link>
                                                 </li>
@@ -95,14 +95,16 @@ export default function MegaMenu({ scrolled, menuItems = [] }: MegaMenuProps) {
                                         </ul>
                                     </div>
                                 ))}
-                                {/* Promo Card (Optional, for the last column or extra space) */}
+
                                 {item.columns.length >= 2 && (
-                                    <div className="col-span-1 bg-gray-50 rounded-lg p-4 flex flex-col justify-end items-start group cursor-pointer hover:bg-primary-50 transition-colors">
-                                        <span className="text-xs font-bold text-primary-600 uppercase mb-2">Featured</span>
-                                        <h5 className="font-bold text-gray-900 mb-1 group-hover:text-primary-700">Explore Campus Life</h5>
-                                        <p className="text-xs text-gray-500 mb-3">See what it's really like to study abroad.</p>
-                                        <Link href="/stories" className="text-xs font-semibold text-primary-600 flex items-center">
-                                            Read Stories <span className="ml-1">→</span>
+                                    <div className="col-span-1 p-6 rounded-3xl bg-white/5 border border-white/5 flex flex-col justify-between items-start group hover:bg-white/10 transition-all">
+                                        <div>
+                                            <span className="text-[10px] font-black text-primary-400 uppercase tracking-widest mb-3 block">Expert Advice</span>
+                                            <h5 className="font-black text-white text-lg leading-tight mb-2">Academic Excellence awaits.</h5>
+                                            <p className="text-xs text-gray-400 leading-relaxed font-bold">Book a free consultation session with our senior counselors.</p>
+                                        </div>
+                                        <Link href="/appointments" className="mt-6 text-xs font-black uppercase tracking-widest text-primary-400 flex items-center gap-2 group-hover:gap-3 transition-all">
+                                            Book Now <span>→</span>
                                         </Link>
                                     </div>
                                 )}

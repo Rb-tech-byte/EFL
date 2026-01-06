@@ -1,29 +1,45 @@
 import { Link } from '@inertiajs/react';
 import { PropsWithChildren } from 'react';
+import ApplicationLogo from '@/Components/ApplicationLogo';
 
 export default function Guest({ children }: PropsWithChildren) {
     return (
-        <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-50 relative overflow-hidden">
-            {/* Background Effects */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary-50 to-secondary-50 -z-10"></div>
-            <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-primary-200 blur-3xl opacity-40 animate-pulse"></div>
-            <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-secondary-200 blur-3xl opacity-40 animate-pulse delay-700"></div>
+        <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-[#0f172a] relative overflow-hidden font-sans">
+            {/* Abstract Background Elements */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] rounded-full bg-primary-600/30 blur-[120px] animate-pulse"></div>
+                <div className="absolute top-[20%] -right-[5%] w-[30%] h-[30%] rounded-full bg-secondary-600/20 blur-[100px] animate-bounce duration-[10s]"></div>
+                <div className="absolute -bottom-[10%] left-[20%] w-[35%] h-[35%] rounded-full bg-blue-600/20 blur-[110px] animate-pulse delay-1000"></div>
+            </div>
 
-            <div className="mb-6 relative z-10">
-                <Link href="/" className="flex flex-col items-center group">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-600 to-secondary-600 flex items-center justify-center text-white font-bold text-3xl shadow-lg group-hover:scale-110 transition-transform duration-300">
-                        E
-                    </div>
-                    <span className="mt-3 text-2xl font-display font-bold text-gray-900">EducationForLiberty</span>
+            {/* Back to Home Button */}
+            <div className="absolute top-8 left-8 z-50">
+                <Link
+                    href="/"
+                    className="flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-white/10 backdrop-blur-md rounded-2xl text-white/70 hover:text-white transition-all text-sm font-black uppercase tracking-widest border border-white/10 shadow-2xl"
+                >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    Home
                 </Link>
             </div>
 
-            <div className="w-full sm:max-w-md px-8 py-8 bg-white/80 backdrop-blur-xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-3xl relative z-10 transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
+            <div className="mb-10 relative z-10">
+                <Link href="/" className="flex flex-col items-center group">
+                    <div className="w-20 h-20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 ease-out">
+                        <ApplicationLogo className="w-full h-full shadow-[0_20px_50px_rgba(30,64,175,0.3)] rounded-[2rem]" />
+                    </div>
+                    <span className="mt-5 text-4xl font-black text-white tracking-[0.2em] uppercase">E L F</span>
+                </Link>
+            </div>
+
+            <div className="w-full sm:max-w-md px-10 py-12 bg-[#1e293b]/60 backdrop-blur-3xl border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.5)] rounded-[2.5rem] relative z-10">
                 {children}
             </div>
 
-            <div className="mt-8 text-center text-sm text-gray-500 relative z-10">
-                &copy; {new Date().getFullYear()} EducationForLiberty. All rights reserved.
+            <div className="mt-12 text-center text-xs font-bold text-gray-500 uppercase tracking-[0.3em] relative z-10">
+                &copy; {new Date().getFullYear()} ELF. GLOBAL EDUCATION REDEFINED.
             </div>
         </div>
     );

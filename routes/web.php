@@ -129,6 +129,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/application/{application}', [\App\Http\Controllers\ApplicationController::class, 'update'])->name('application.update');
 
     // Generic Message Routes (accessible by all authenticated users)
+    Route::get('/messages', [\App\Http\Controllers\MessageController::class, 'index'])->name('messages.index');
     Route::post('/messages', [\App\Http\Controllers\MessageController::class, 'store'])->name('messages.store');
     Route::patch('/messages/{id}/read', [\App\Http\Controllers\MessageController::class, 'markAsRead'])->name('messages.mark-read');
 
@@ -203,14 +204,18 @@ Route::middleware('auth')->group(function () {
         Route::patch('authors/{id}/reject', [\App\Http\Controllers\Admin\AuthorController::class, 'reject'])->name('admin.authors.reject');
 
         Route::resource('books', \App\Http\Controllers\Admin\BookController::class)->names('admin.books');
-        Route::patch('books/{id}/publish', [\App\Http\Controllers\Admin\BookController::class, 'publish'])->name('admin.books.publish');
-        Route::patch('books/{id}/unpublish', [\App\Http\Controllers\Admin\BookController::class, 'unpublish'])->name('admin.books.unpublish');
+        Route::patch('books/{book}/publish', [\App\Http\Controllers\Admin\BookController::class, 'publish'])->name('admin.books.publish');
+        Route::patch('books/{book}/unpublish', [\App\Http\Controllers\Admin\BookController::class, 'unpublish'])->name('admin.books.unpublish');
+
+        Route::resource('book-categories', \App\Http\Controllers\Admin\BookCategoryController::class)->names('admin.book-categories');
 
         Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class)->only(['index', 'show'])->names('admin.orders');
 
         Route::get('reviews', [\App\Http\Controllers\Admin\ReviewController::class, 'index'])->name('admin.reviews.index');
         Route::patch('reviews/{id}/approve', [\App\Http\Controllers\Admin\ReviewController::class, 'approve'])->name('admin.reviews.approve');
         Route::delete('reviews/{id}', [\App\Http\Controllers\Admin\ReviewController::class, 'destroy'])->name('admin.reviews.destroy');
+
+        Route::get('payments', [\App\Http\Controllers\Admin\PaymentController::class, 'index'])->name('admin.payments.index');
     });
 
     // Staff Routes
@@ -227,6 +232,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/appointments', [\App\Http\Controllers\StaffController::class, 'appointments'])->name('staff.appointments');
         Route::get('/payments', [\App\Http\Controllers\StaffController::class, 'payments'])->name('staff.payments');
         Route::get('/events', [\App\Http\Controllers\StaffController::class, 'events'])->name('staff.events');
+        Route::get('/blog', [\App\Http\Controllers\StaffController::class, 'blog'])->name('staff.blog');
     });
 
     // Student Routes
@@ -239,10 +245,11 @@ Route::middleware('auth')->group(function () {
 
         // New Student Features
         Route::get('/student/appointments', [\App\Http\Controllers\StudentController::class, 'appointments'])->name('student.appointments');
+        Route::post('/student/appointments', [\App\Http\Controllers\StudentController::class, 'storeAppointment'])->name('student.appointments.store');
         Route::get('/student/events', [\App\Http\Controllers\StudentController::class, 'events'])->name('student.events');
+        Route::get('/student/blog', [\App\Http\Controllers\StudentController::class, 'blog'])->name('student.blog');
 
-        // Messages
-        Route::get('/messages', [\App\Http\Controllers\MessageController::class, 'index'])->name('student.messages');
+
 
         // eBook Marketplace - Student Features
         Route::post('/shop/purchase', [\App\Http\Controllers\Shop\BookController::class, 'purchase'])->name('shop.purchase');
@@ -257,6 +264,8 @@ Route::middleware('auth')->group(function () {
         Route::delete('/wishlist/{id}', [\App\Http\Controllers\Student\WishlistController::class, 'destroy'])->name('student.wishlist.destroy');
 
         Route::post('/reviews', [\App\Http\Controllers\Student\ReviewController::class, 'store'])->name('reviews.store');
+        Route::get('/become-author', [\App\Http\Controllers\StudentController::class, 'becomeAuthor'])->name('student.become-author');
+        Route::post('/become-author', [\App\Http\Controllers\StudentController::class, 'submitAuthorApplication'])->name('student.submit-author');
     });
 
     // Author Routes
@@ -264,6 +273,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\Author\DashboardController::class, 'index'])->name('author.dashboard');
         Route::resource('books', \App\Http\Controllers\Author\BookController::class)->names('author.books');
         Route::get('/earnings', [\App\Http\Controllers\Author\EarningsController::class, 'index'])->name('author.earnings');
+        Route::get('/reviews', [\App\Http\Controllers\Author\ReviewController::class, 'index'])->name('author.reviews');
+        Route::get('/messages', [\App\Http\Controllers\MessageController::class, 'index'])->name('author.messages');
         Route::get('/profile', [\App\Http\Controllers\Author\ProfileController::class, 'edit'])->name('author.profile.edit');
         Route::put('/profile', [\App\Http\Controllers\Author\ProfileController::class, 'update'])->name('author.profile.update');
     });

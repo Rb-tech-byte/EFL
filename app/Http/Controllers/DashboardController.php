@@ -20,6 +20,8 @@ class DashboardController extends Controller
             return $this->adminDashboard();
         } elseif ($user->role === 'staff') {
             return $this->staffDashboard();
+        } elseif ($user->role === 'author') {
+            return redirect()->route('author.dashboard');
         }
         return $this->studentDashboard();
     }

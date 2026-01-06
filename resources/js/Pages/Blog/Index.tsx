@@ -31,7 +31,9 @@ export default function BlogIndex({ posts }: any) {
                                         <span className="text-xs text-gray-400">{post.created_at}</span>
                                     </div>
                                     <h2 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-primary-600 transition-colors line-clamp-2">{post.title}</h2>
-                                    <p className="text-gray-600 mb-6 line-clamp-3 font-sans leading-relaxed">{post.excerpt}</p>
+                                    <p className="text-gray-600 mb-6 line-clamp-3 font-sans leading-relaxed">
+                                        {post.content?.replace(/<[^>]*>/g, '').substring(0, 160)}...
+                                    </p>
                                     <Link href={`/blog/${post.slug}`} className="mt-auto text-primary-600 font-bold flex items-center gap-2 group-hover:gap-3 transition-all">
                                         Read Article <span>→</span>
                                     </Link>

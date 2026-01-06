@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use App\Models\MenuItem;
 use App\Models\MenuColumn;
 use App\Models\MenuLink;
@@ -11,10 +12,12 @@ class MenuSeeder extends Seeder
 {
     public function run(): void
     {
-        // Clear existing menu data
+        // Clear existing menu data (delete in correct order to avoid FK constraints)
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         MenuLink::truncate();
         MenuColumn::truncate();
         MenuItem::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         // Universities Menu
         $universities = MenuItem::create(['name' => 'Universities', 'order' => 1, 'is_active' => true]);

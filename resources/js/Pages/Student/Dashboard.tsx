@@ -117,7 +117,7 @@ export default function Dashboard({ stats, recentApplications, messages, univers
                                         </div>
                                     ))}
                                     <div className="text-center pt-2">
-                                        <Link href={route('student.messages')} className="text-xs text-primary-600 hover:text-primary-800 font-medium">View All Messages</Link>
+                                        <Link href={route('messages.index')} className="text-xs text-primary-600 hover:text-primary-800 font-medium">View All Messages</Link>
                                     </div>
                                 </div>
                             </div>

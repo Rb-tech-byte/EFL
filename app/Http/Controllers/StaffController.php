@@ -36,4 +36,10 @@ class StaffController extends Controller
         $events = Event::latest()->paginate(10);
         return Inertia::render('Staff/Events', ['events' => $events]);
     }
+
+    public function blog()
+    {
+        $posts = \App\Models\Post::with('author')->latest()->paginate(10);
+        return Inertia::render('Staff/Blog', ['posts' => $posts]);
+    }
 }

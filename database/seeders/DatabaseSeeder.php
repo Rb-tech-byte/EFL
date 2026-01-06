@@ -42,6 +42,13 @@ class DatabaseSeeder extends Seeder
             'role' => 'student',
         ]);
 
-        $this->call(DashboardSeeder::class);
+        // Call all seeders in order
+        $this->call([
+            SettingsSeeder::class,
+            MenuSeeder::class,
+            DashboardSeeder::class,
+            UniversityProfileSeeder::class,
+            // PaymentSeeder::class, // Run this separately if needed
+        ]);
     }
 }

@@ -4,21 +4,22 @@ import { useState } from 'react';
 
 export default function Checkout({ cart, coupon }: any) {
     const cartItems = Object.values(cart);
-    const subtotal = cartItems.reduce((acc: number, item: any) => acc + item.price, 0);
+    const subtotal = cartItems.reduce((acc: number, item: any) => acc + Number(item.price), 0);
 
     let discount = 0;
     if (coupon) {
+        const couponValue = Number(coupon.value);
         if (coupon.type === 'percentage') {
-            discount = (subtotal * coupon.value) / 100;
+            discount = (subtotal * couponValue) / 100;
         } else {
-            discount = coupon.value;
+            discount = couponValue;
         }
     }
 
     const finalTotal = Math.max(0, subtotal - discount);
 
     const { data, setData, post, processing, errors } = useForm({
-        payment_method: 'stripe',
+        payment_method: 'pesapal',
         billing_address: '',
         city: '',
         country: 'United States',
@@ -58,6 +59,31 @@ export default function Checkout({ cart, coupon }: any) {
                                 </h2>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <label className={`relative flex items-center gap-3 p-4 border-2 rounded-xl cursor-pointer transition-all ${data.payment_method === 'pesapal' ? 'border-primary-600 bg-primary-50' : 'border-gray-100 hover:border-gray-200'}`}>
+                                        <input
+                                            type="radio"
+                                            name="payment"
+                                            value="pesapal"
+                                            checked={data.payment_method === 'pesapal'}
+                                            onChange={e => setData('payment_method', e.target.value)}
+                                            className="hidden"
+                                        />
+                                        <div className="w-12 h-8 bg-white rounded border border-gray-100 flex items-center justify-center shadow-sm overflow-hidden">
+                                            <span className="text-[8px] font-black text-white bg-orange-500 w-full h-full flex items-center justify-center">PESAPAL</span>
+                                        </div>
+                                        <div>
+                                            <p className="font-bold text-gray-900 text-sm">Pesapal</p>
+                                            <p className="text-xs text-gray-500">Mobile Money & Card (Kenya/East Africa)</p>
+                                        </div>
+                                        {data.payment_method === 'pesapal' && (
+                                            <div className="absolute top-2 right-2 text-primary-600">
+                                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                                </svg>
+                                            </div>
+                                        )}
+                                    </label>
+
                                     <label className={`relative flex items-center gap-3 p-4 border-2 rounded-xl cursor-pointer transition-all ${data.payment_method === 'stripe' ? 'border-primary-600 bg-primary-50' : 'border-gray-100 hover:border-gray-200'}`}>
                                         <input
                                             type="radio"
@@ -71,8 +97,8 @@ export default function Checkout({ cart, coupon }: any) {
                                             <span className="text-[10px] font-black text-blue-600 italic">Stripe</span>
                                         </div>
                                         <div>
-                                            <p className="font-bold text-gray-900 text-sm">Credit / Debit Card</p>
-                                            <p className="text-xs text-gray-500">Secure payment via Stripe</p>
+                                            <p className="font-bold text-gray-900 text-sm">Card</p>
+                                            <p className="text-xs text-gray-500">International Credit/Debit Card</p>
                                         </div>
                                         {data.payment_method === 'stripe' && (
                                             <div className="absolute top-2 right-2 text-primary-600">

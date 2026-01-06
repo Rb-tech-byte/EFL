@@ -13,6 +13,8 @@ class Author extends Model
         'user_id',
         'pen_name',
         'bio',
+        'website',
+        'social_links',
         'profile_image',
         'status',
         'commission_rate',
@@ -22,6 +24,7 @@ class Author extends Model
     protected $casts = [
         'commission_rate' => 'decimal:2',
         'total_earnings' => 'decimal:2',
+        'social_links' => 'json',
     ];
 
     // Relationships

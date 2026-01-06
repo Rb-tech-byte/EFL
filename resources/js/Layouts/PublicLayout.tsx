@@ -1,6 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
 import { PropsWithChildren, useState, useEffect } from 'react';
 import MegaMenu from '@/Components/MegaMenu';
+import ApplicationLogo from '@/Components/ApplicationLogo';
 
 export default function PublicLayout({ children }: PropsWithChildren) {
     const { auth, menuItems, settings } = usePage().props as any;
@@ -28,35 +29,40 @@ export default function PublicLayout({ children }: PropsWithChildren) {
     ];
 
     return (
-        <div className="min-h-screen flex flex-col font-sans selection:bg-primary-200 selection:text-primary-900 bg-gray-50">
+        <div className="min-h-screen flex flex-col font-sans selection:bg-primary-200 selection:text-primary-900 bg-[#f8fafc]">
             {/* Navigation */}
-            <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'glass h-20' : 'bg-transparent h-24'}`}>
+            <nav className={`fixed top-0 w-full z-50 transition-all duration-500 bg-[#0f172a]/80 backdrop-blur-2xl border-b border-white/5 shadow-[0_20px_50px_rgba(0,0,0,0.1)] ${scrolled ? 'h-20' : 'h-24'}`}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
                     <div className="flex justify-between items-center h-full">
                         {/* Logo */}
                         <div className="flex-shrink-0 flex items-center">
-                            <Link href="/" className="flex items-center gap-2 group">
+                            <Link href="/" className="flex items-center gap-4 group">
                                 {siteLogo ? (
                                     <img src={siteLogo} alt={siteName} className="h-10 w-auto object-contain" />
                                 ) : (
-                                    <span className={`text-2xl font-display font-bold tracking-tight ${scrolled ? 'text-gray-900' : 'text-gray-900'} transition-colors`}>
-                                        {siteName}
-                                    </span>
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-12 h-12 shadow-2xl group-hover:scale-110 transition-transform">
+                                            <ApplicationLogo className="w-full h-full rounded-xl" />
+                                        </div>
+                                        <span className={`text-2xl font-black tracking-[0.2em] ${scrolled || true ? 'text-white' : 'text-gray-900'} transition-colors uppercase`}>
+                                            ELF
+                                        </span>
+                                    </div>
                                 )}
                             </Link>
                         </div>
 
                         {/* Desktop Menu - Mega Menu & Standard Links */}
-                        <div className="flex items-center h-full mx-8 space-x-6">
-                            <MegaMenu scrolled={scrolled} menuItems={menuItems} />
+                        <div className="hidden lg:flex items-center h-full mx-8 space-x-1">
+                            <MegaMenu scrolled={true} menuItems={menuItems} dark={true} />
 
-                            <Link href="/shop" className={`text-sm font-medium transition-colors hover:text-primary-600 ${scrolled ? 'text-gray-800' : 'text-gray-900'}`}>
+                            <Link href="/shop" className="px-4 py-2 text-sm font-black uppercase tracking-widest text-gray-300 hover:text-white transition-colors">
                                 Shop
                             </Link>
-                            <Link href="/blog" className={`text-sm font-medium transition-colors hover:text-primary-600 ${scrolled ? 'text-gray-800' : 'text-gray-900'}`}>
+                            <Link href="/blog" className="px-4 py-2 text-sm font-black uppercase tracking-widest text-gray-300 hover:text-white transition-colors">
                                 Blog
                             </Link>
-                            <Link href="/events" className={`text-sm font-medium transition-colors hover:text-primary-600 ${scrolled ? 'text-gray-800' : 'text-gray-900'}`}>
+                            <Link href="/events" className="px-4 py-2 text-sm font-black uppercase tracking-widest text-gray-300 hover:text-white transition-colors">
                                 Events
                             </Link>
                         </div>
@@ -66,47 +72,47 @@ export default function PublicLayout({ children }: PropsWithChildren) {
                             {/* Shopping Cart */}
                             <Link
                                 href="/cart"
-                                className={`relative p-2 transition-colors rounded-full hover:bg-gray-100 ${scrolled ? 'text-gray-600' : 'text-gray-900'}`}
+                                className="relative p-2.5 transition-all rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 text-white shadow-xl"
                             >
                                 {auth.cartCount > 0 && (
-                                    <span className="absolute top-0 right-0 w-4 h-4 bg-primary-600 rounded-full border-2 border-white text-[10px] text-white flex items-center justify-center font-bold">
+                                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary-500 rounded-full border-2 border-[#0f172a] text-[10px] text-white flex items-center justify-center font-black">
                                         {auth.cartCount}
                                     </span>
                                 )}
-                                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                                 </svg>
                             </Link>
 
-                            <div className="h-6 w-px bg-gray-200"></div>
+                            <div className="h-6 w-px bg-white/10"></div>
 
                             {auth.user ? (
-                                <Link href="/dashboard" className="btn-primary">
+                                <Link href="/dashboard" className="px-6 py-2.5 bg-primary-600 hover:bg-primary-500 text-white text-xs font-black uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-primary-500/20 transition-all active:scale-95">
                                     Dashboard
                                 </Link>
                             ) : (
-                                <>
-                                    <Link href="/login" className={`text-sm font-semibold hover:text-primary-600 transition-colors ${scrolled ? 'text-gray-700' : 'text-gray-900'}`}>
+                                <div className="flex items-center gap-4">
+                                    <Link href="/login" className="text-xs font-black uppercase tracking-widest text-gray-300 hover:text-white transition-colors">
                                         Log in
                                     </Link>
-                                    <Link href="/register" className="btn-primary shadow-lg shadow-primary-500/20">
-                                        Get Started
+                                    <Link href="/register" className="px-6 py-2.5 bg-white text-gray-900 hover:bg-gray-100 text-xs font-black uppercase tracking-[0.2em] rounded-2xl shadow-xl transition-all active:scale-95">
+                                        Join Now
                                     </Link>
-                                </>
+                                </div>
                             )}
                         </div>
 
                         {/* Mobile Menu Button */}
-                        <div className="md:hidden flex items-center">
+                        <div className="lg:hidden flex items-center">
                             <button
                                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                                className="text-gray-600 hover:text-primary-600 focus:outline-none"
+                                className="p-2 text-gray-400 hover:text-white transition-colors"
                             >
                                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     {mobileMenuOpen ? (
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
                                     ) : (
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 6h16M4 12h16M4 18h16" />
                                     )}
                                 </svg>
                             </button>
@@ -114,30 +120,69 @@ export default function PublicLayout({ children }: PropsWithChildren) {
                     </div>
                 </div>
 
-                {/* Mobile Menu */}
-                <div className={`md:hidden absolute top-full left-0 w-full bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-xl transition-all duration-300 overflow-hidden ${mobileMenuOpen ? 'max-h-screen py-4' : 'max-h-0 py-0'}`}>
-                    <div className="px-4 space-y-4">
-                        {navLinks.map((item) => (
-                            <Link
-                                key={item.name}
-                                href={item.href}
-                                className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 rounded-lg transition-colors"
+                {/* Mobile Drawer Overlay */}
+                <div
+                    className={`lg:hidden fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-[60] transition-opacity duration-500 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                ></div>
+
+                {/* Mobile Slide-out Drawer */}
+                <div className={`lg:hidden fixed top-0 right-0 h-full w-[300px] bg-[#0f172a] z-[70] shadow-[-20px_0_50px_rgba(0,0,0,0.5)] transition-transform duration-500 ease-in-out transform border-l border-white/5 ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+                    <div className="flex flex-col h-full p-8">
+                        <div className="flex justify-between items-center mb-10">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 shadow-lg">
+                                    <ApplicationLogo className="w-full h-full rounded-lg" />
+                                </div>
+                                <span className="text-sm font-black text-white tracking-[0.2em] uppercase">ELF</span>
+                            </div>
+                            <button
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="p-2 text-gray-400 hover:text-white transition-colors"
                             >
-                                {item.name}
-                            </Link>
-                        ))}
-                        <div className="pt-4 border-t border-gray-100 grid grid-cols-2 gap-4">
+                                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div className="flex-grow space-y-2">
+                            {navLinks.map((item) => (
+                                <Link
+                                    key={item.name}
+                                    href={item.href}
+                                    className="block px-4 py-4 text-xs font-black uppercase tracking-[0.2em] text-gray-400 hover:text-white hover:bg-white/5 rounded-2xl transition-all"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                >
+                                    {item.name}
+                                </Link>
+                            ))}
+                        </div>
+
+                        <div className="pt-8 border-t border-white/10 space-y-4">
                             {auth.user ? (
-                                <Link href="/dashboard" className="col-span-2 text-center btn-primary">
+                                <Link
+                                    href="/dashboard"
+                                    className="block w-full text-center py-5 bg-primary-600 text-white text-xs font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-primary-500/20"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                >
                                     Dashboard
                                 </Link>
                             ) : (
                                 <>
-                                    <Link href="/login" className="text-center px-4 py-2 text-gray-700 font-semibold border border-gray-200 rounded-full hover:bg-gray-50">
-                                        Log in
+                                    <Link
+                                        href="/login"
+                                        className="block w-full text-center py-5 text-xs font-black uppercase tracking-widest text-white border border-white/10 rounded-2xl"
+                                        onClick={() => setMobileMenuOpen(false)}
+                                    >
+                                        Login
                                     </Link>
-                                    <Link href="/register" className="text-center btn-primary">
-                                        Sign up
+                                    <Link
+                                        href="/register"
+                                        className="block w-full text-center py-5 bg-white text-gray-900 text-xs font-black uppercase tracking-widest rounded-2xl shadow-xl"
+                                        onClick={() => setMobileMenuOpen(false)}
+                                    >
+                                        Get Started
                                     </Link>
                                 </>
                             )}
@@ -154,14 +199,14 @@ export default function PublicLayout({ children }: PropsWithChildren) {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
                         <div className="space-y-6">
-                            <div className="flex items-center gap-2">
-                                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center text-white font-bold">
-                                    E
+                            <div className="flex items-center gap-3">
+                                <div className="w-12 h-12 shadow-2xl">
+                                    <ApplicationLogo className="w-full h-full rounded-xl" />
                                 </div>
-                                <span className="text-xl font-display font-bold">EducationForLiberty</span>
+                                <span className="text-2xl font-black tracking-[0.2em] text-white uppercase">ELF</span>
                             </div>
-                            <p className="text-slate-400 text-sm leading-relaxed">
-                                Empowering the next generation of leaders through accessible, world-class education and global opportunities.
+                            <p className="text-slate-400 text-sm leading-relaxed font-medium">
+                                Redefining global education through excellence and innovation. Join the elite community.
                             </p>
                             <div className="flex space-x-4">
                                 {/* Social Icons placeholders */}
@@ -213,8 +258,8 @@ export default function PublicLayout({ children }: PropsWithChildren) {
                     </div>
 
                     <div className="pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
-                        <p className="text-slate-500 text-xs">© {new Date().getFullYear()} EducationForLiberty. All rights reserved.</p>
-                        <div className="flex space-x-6 text-slate-500 text-xs">
+                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">© {new Date().getFullYear()} ELF. ALL RIGHTS RESERVED.</p>
+                        <div className="flex space-x-6 text-slate-500 text-[10px] font-black uppercase tracking-widest">
                             <Link href="/privacy" className="hover:text-white transition">Privacy Policy</Link>
                             <Link href="/terms" className="hover:text-white transition">Terms of Service</Link>
                             <Link href="/cookies" className="hover:text-white transition">Cookie Settings</Link>

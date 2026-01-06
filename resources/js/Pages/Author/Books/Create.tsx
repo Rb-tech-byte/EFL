@@ -1,8 +1,30 @@
 import { Head, useForm, Link } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import RichTextEditor from '@/Components/RichTextEditor';
+
+interface BookForm {
+    title: string;
+    description: string;
+    category_id: number | string;
+    type: string;
+    format: string;
+    price: number;
+    is_free: boolean;
+    cover_image: File | null;
+    file: File | null;
+    preview_file: File | null;
+    isbn: string;
+    pages: number | string;
+    language: string;
+    publisher: string;
+    published_date: string;
+    tags: string[];
+    allow_reviews: boolean;
+    screenshot_protected: boolean;
+}
 
 export default function AuthorBookCreate({ categories }: any) {
-    const { data, setData, post, processing, errors } = useForm({
+    const { data, setData, post, processing, errors } = useForm<BookForm>({
         title: '',
         description: '',
         category_id: '',
@@ -10,9 +32,9 @@ export default function AuthorBookCreate({ categories }: any) {
         format: '',
         price: 0,
         is_free: false,
-        cover_image: null as File | null,
-        file: null as File | null,
-        preview_file: null as File | null,
+        cover_image: null,
+        file: null,
+        preview_file: null,
         isbn: '',
         pages: '',
         language: 'English',
@@ -64,12 +86,10 @@ export default function AuthorBookCreate({ categories }: any) {
 
                             <div className="col-span-full">
                                 <label className="block text-sm font-bold text-gray-700 mb-2">Description *</label>
-                                <textarea
+                                <RichTextEditor
                                     value={data.description}
-                                    onChange={e => setData('description', e.target.value)}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 transition-all h-32"
+                                    onChange={content => setData('description', content)}
                                     placeholder="Tell readers what your book is about..."
-                                    required
                                 />
                                 {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description}</p>}
                             </div>
@@ -213,7 +233,7 @@ export default function AuthorBookCreate({ categories }: any) {
                                 <input
                                     type="number"
                                     value={data.pages}
-                                    onChange={e => setData('pages', e.target.value)}
+                                    onChange={e => setData('pages', e.target.value ? Number(e.target.value) : '')}
                                     className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 transition-all"
                                     placeholder="Enter total pages"
                                 />

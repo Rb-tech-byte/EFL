@@ -112,7 +112,8 @@ export default function Users({ users }: { users: any[] }) {
                                                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
                                                         ${user.role === 'admin' ? 'bg-purple-100 text-purple-800' :
                                                             user.role === 'staff' ? 'bg-blue-100 text-blue-800' :
-                                                                'bg-green-100 text-green-800'}`}>
+                                                                user.role === 'author' ? 'bg-orange-100 text-orange-800' :
+                                                                    'bg-green-100 text-green-800'}`}>
                                                         {user.role}
                                                     </span>
                                                 </td>
@@ -172,6 +173,7 @@ export default function Users({ users }: { users: any[] }) {
                         >
                             <option value="student">Student</option>
                             <option value="staff">Staff</option>
+                            <option value="author">Author</option>
                             <option value="admin">Admin</option>
                         </select>
                         <InputError message={errors.role} className="mt-2" />

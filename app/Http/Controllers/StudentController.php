@@ -12,6 +12,7 @@ class StudentController extends Controller
 {
     public function applications()
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
         $applications = $user->applications()
             ->with(['program.university'])
@@ -70,7 +71,41 @@ class StudentController extends Controller
             ->latest()
             ->paginate(10);
 
-        return Inertia::render('Student/Appointments', ['appointments' => $appointments]);
+        // Get available consultants
+        $consultants = \App\Models\User::whereIn('role', ['admin', 'staff'])->get(['id', 'name']);
+
+        return Inertia::render('Student/Appointments', [
+            'appointments' => $appointments,
+            'consultants' => $consultants
+        ]);
+    }
+
+    public function storeAppointment(Request $request)
+    {
+        $validated = $request->validate([
+            'consultant_id' => 'nullable|exists:users,id',
+            'date' => 'required|date|after_or_equal:today',
+            'time' => 'required',
+            'type' => 'required|string',
+            'notes' => 'nullable|string',
+        ]);
+
+        $appointment = new \App\Models\Appointment($validated);
+        $appointment->user_id = Auth::id();
+        $appointment->status = 'pending';
+        $appointment->save();
+
+        return back()->with('success', 'Appointment requested successfully');
+    }
+
+    public function blog()
+    {
+        $posts = \App\Models\Post::with('author')
+            ->where('status', 'published')
+            ->latest()
+            ->paginate(12);
+
+        return Inertia::render('Student/Blog', ['posts' => $posts]);
     }
 
     public function events()
@@ -107,5 +142,39 @@ class StudentController extends Controller
         return Inertia::render('Student/Messages', [
             'messages' => $messages
         ]);
+    }
+
+    public function becomeAuthor()
+    {
+        $user = Auth::user();
+        if ($user->authorProfile) {
+            return redirect()->route('author.dashboard');
+        }
+
+        return Inertia::render('Student/BecomeAuthor');
+    }
+
+    public function submitAuthorApplication(Request $request)
+    {
+        $user = Auth::user();
+
+        if ($user->authorProfile) {
+            return back()->with('error', 'You already have an author profile or application.');
+        }
+
+        $validated = $request->validate([
+            'pen_name' => 'required|string|max:255',
+            'bio' => 'required|string|max:1000',
+        ]);
+
+        \App\Models\Author::create([
+            'user_id' => $user->id,
+            'pen_name' => $validated['pen_name'],
+            'bio' => $validated['bio'],
+            'status' => 'pending',
+            'commission_rate' => 30.00,
+        ]);
+
+        return redirect()->route('dashboard')->with('success', 'Author application submitted successfully! Waiting for admin approval.');
     }
 }

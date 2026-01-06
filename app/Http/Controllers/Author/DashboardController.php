@@ -33,7 +33,7 @@ class DashboardController extends Controller
             ->whereHas('order', function ($query) {
                 $query->where('status', 'completed');
             })
-            ->sum('quantity');
+            ->count();
 
         $totalDownloads = Book::where('author_id', $author->id)->sum('downloads');
 
@@ -94,7 +94,7 @@ class DashboardController extends Controller
                     'book_title' => $review->book->title,
                     'rating' => $review->rating,
                     'review' => $review->review,
-                    'user' => $review->user->name,
+                    'user_name' => $review->user->name,
                     'date' => $review->created_at->diffForHumans(),
                 ];
             });

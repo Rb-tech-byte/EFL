@@ -56,10 +56,10 @@ class MessageController extends Controller
 
         // Fetch "advisors" (Recipients) based on role
         if ($user->role === 'admin' || $user->role === 'staff') {
-            // Admins/Staff can message Students (and potentially each other, but let's start with Students)
-            $advisors = User::where('role', 'student')->select('id', 'name', 'role')->get();
+            // Admins/Staff can message Students and Authors
+            $advisors = User::whereIn('role', ['student', 'author'])->select('id', 'name', 'role')->get();
         } else {
-            // Students can message Admins and Staff
+            // Students and Authors can message Admins and Staff
             $advisors = User::whereIn('role', ['admin', 'staff'])->select('id', 'name', 'role')->get();
         }
 
