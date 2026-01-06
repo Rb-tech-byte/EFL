@@ -7,12 +7,12 @@ export default defineConfig({
         laravel({
             input: 'resources/js/app.tsx',
             refresh: true,
-            publicDirectory: '../public_html',
+            publicDirectory: '../',
         }),
         react(),
     ],
     build: {
-        outDir: '../public_html/build',
+        outDir: '../build',
         emptyOutDir: true,
         chunkSizeWarningLimit: 1500,
         rollupOptions: {
