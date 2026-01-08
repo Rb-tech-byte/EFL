@@ -245,12 +245,9 @@ Route::middleware('auth')->group(function () {
     });
 
     // Student Routes
-
-
-    // Student Routes
     Route::middleware('can:student')->group(function () {
         Route::get('/applications', [\App\Http\Controllers\StudentController::class, 'applications'])->name('student.applications');
-        // Route::get('/universities', [\App\Http\Controllers\StudentController::class, 'universities'])->name('student.universities');
+        Route::get('/student/universities', [\App\Http\Controllers\StudentController::class, 'universities'])->name('student.universities');
 
         // New Student Features
         Route::get('/student/appointments', [\App\Http\Controllers\StudentController::class, 'appointments'])->name('student.appointments');
